@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { Host, SharePermissionLevel } from "@termix-ssh/plugin-sdk/ui";
 import {
+  canArrangeHost,
   canDeleteHost,
   canEditHost,
+  canOpenHostEditor,
   canShareHost,
   canViewHostConfig,
 } from "../../../src/frontend/sidebar/host-permissions";
@@ -14,6 +16,25 @@ function ownHost(): Host {
 function sharedHost(permissionLevel?: SharePermissionLevel): Host {
   return { id: "2", name: "shared", isShared: true, permissionLevel } as Host;
 }
+
+describe("managed host permissions", () => {
+  const managed = {
+    ...ownHost(),
+    lock: { pluginId: "cfg", pluginName: "Config", note: null },
+  } as Host;
+
+  it("is read only but can still be opened and arranged", () => {
+    expect(canEditHost(managed)).toBe(false);
+    expect(canShareHost(managed)).toBe(false);
+    expect(canDeleteHost(managed)).toBe(false);
+    expect(canOpenHostEditor(managed)).toBe(true);
+    expect(canArrangeHost(managed)).toBe(true);
+  });
+
+  it("leaves a view-level share closed", () => {
+    expect(canOpenHostEditor(sharedHost("view"))).toBe(false);
+  });
+});
 
 describe("host permissions", () => {
   it("grants every action on a host you own", () => {

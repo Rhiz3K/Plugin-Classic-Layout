@@ -6,6 +6,14 @@ The icon rail on the left opens the host list, credentials, Quick Connect and th
 
 The Dashboard, Manage and Settings screens open as tabs. The command palette opens with its shortcut and finds hosts, tabs, settings and actions. On a phone the rail becomes a bottom bar.
 
+## Branding
+
+Admins can set the app name, tagline and logo in Settings, Admin. They show on the sign in screen and in the browser tab. The logo can be a PNG, JPEG or WebP and is saved as a PNG up to 750 KB. The right to change branding is the Change branding permission, which admins have by default. Branding is saved by this plugin, so it also comes from here if another layout is in use.
+
+## First run
+
+The first run asks how much you want on screen (the preset) and for a theme, accent color, font and language. Both steps come from this plugin.
+
 ## Switch to another layout
 
 Open Settings, Appearance and pick a layout. Admins can set the default layout for everyone. You can switch back at any time, and Classic Layout cannot be uninstalled.

@@ -32,11 +32,11 @@ const folder = {
   children: [],
 } as unknown as HostFolder;
 
-function renderFolder(onToggleFolder = vi.fn()) {
+function renderFolder(onToggleFolder = vi.fn(), target = folder) {
   const noop = vi.fn();
   render(
     <FolderItem
-      folder={folder}
+      folder={target}
       flat
       onOpenTab={noop}
       onDeleteHost={noop}
@@ -85,4 +85,27 @@ it("ignores keys pressed on a folder action", () => {
   const action = document.querySelector("button")!;
   fireEvent.keyDown(action, { key: "Enter" });
   expect(onToggle).not.toHaveBeenCalled();
+});
+
+it("marks a folder of managed hosts and hides rename and delete", () => {
+  const managed = {
+    ...folder,
+    children: [{ id: "1", name: "a", lock: { pluginName: "Sync" } }],
+  } as unknown as HostFolder;
+  renderFolder(vi.fn(), managed);
+  expect(
+    document.querySelector('[data-testid="folder-managed-marker"]'),
+  ).not.toBeNull();
+  const titles = [...document.querySelectorAll("button")].map((b) => b.title);
+  expect(titles).not.toContain("hosts.editFolder");
+  expect(titles).not.toContain("hosts.deleteFolder");
+});
+
+it("leaves a normal folder editable", () => {
+  renderFolder();
+  expect(
+    document.querySelector('[data-testid="folder-managed-marker"]'),
+  ).toBeNull();
+  const titles = [...document.querySelectorAll("button")].map((b) => b.title);
+  expect(titles).toContain("hosts.editFolder");
 });

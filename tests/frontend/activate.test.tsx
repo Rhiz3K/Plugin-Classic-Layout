@@ -40,6 +40,14 @@ describe(`${manifest.id} activate`, () => {
     ]);
   });
 
+  it("takes over the preset and appearance onboarding steps", async () => {
+    rendered = await renderWithApp(plugin, { manifest, locales });
+    expect(rendered.registered.onboardingSteps().sort()).toEqual([
+      "appearance",
+      "preset",
+    ]);
+  });
+
   it("offers the host list and the Dashboard to other plugins", async () => {
     rendered = await renderWithApp(plugin, { manifest, locales });
     for (const id of ["classic-layout.hostTree", "classic-layout.dashboard"]) {
